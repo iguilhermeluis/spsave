@@ -1,8 +1,8 @@
 {
-  "name": "spsave",
-  "description": "Save files in SharePoint using node.js easily",
-  "version": "4.0.2",
-  "author": "Sergei Sergeev <sergeev.srg@gmail.com>",
+  "name": "spsave-pipeline",
+  "description": "Save files in SharePoint using node.js easily | No node notifier",
+  "version": "4.0.3",
+  "author": "Guilherme Faustino <contato@guilhermeluis.com>",
   "main": "./lib/src/index.js",
   "typings": "./lib/src/index",
   "engines": {
@@ -40,7 +40,7 @@
     "bail": true
   },
   "bugs": {
-    "url": "https://github.com/s-KaiNet/spsave/issues"
+    "url": "https://github.com/iguilhermeluis/spsave/issues"
   },
   "keywords": [
     "request",
@@ -50,7 +50,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/s-KaiNet/spsave.git"
+    "url": "git://github.com/iguilhermeluis/spsave.git"
   },
   "licenses": [
     {
@@ -84,12 +84,10 @@
   "dependencies": {
     "@types/core-js": "^2.5.3",
     "@types/node": "^14.0.13",
-    "@types/node-notifier": "6.0.1",
     "@types/vinyl": "^2.0.4",
     "@types/vinyl-fs": "2.4.11",
     "colors": "1.4.0",
     "globby": "^6.1.0",
-    "node-notifier": "7.0.1",
     "sp-request": "^3.0.0",
     "vinyl": "2.2.0"
   }
