@@ -1,12 +1,6 @@
-import * as notifier from 'node-notifier';
-import * as path from 'path';
 import { IAuthOptions, HTTPError } from 'sp-request';
 
-import {
-  ICoreOptions,
-  FileOptions,
-  ISPSaveOptions
-} from './SPSaveOptions';
+import { ICoreOptions, FileOptions, ISPSaveOptions } from './SPSaveOptions';
 import { FileSaver } from './FileSaver';
 import { ILogger } from './../utils/ILogger';
 import { ConsoleLogger } from './../utils/ConsoleLogger';
@@ -15,57 +9,67 @@ import { defer, IDeferred } from './../utils/Defer';
 
 const logger: ILogger = new ConsoleLogger();
 
-export function spsave(coreOptions: ICoreOptions, credentialOptions: IAuthOptions, fileOptions: FileOptions): Promise<any> {
+export function spsave(
+  coreOptions: ICoreOptions,
+  credentialOptions: IAuthOptions,
+  fileOptions: FileOptions
+): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-
     const spSaveOptions: ISPSaveOptions = {
       creds: credentialOptions,
       core: coreOptions,
-      files: FileOptionsParser.parseOptions(fileOptions)
+      files: FileOptionsParser.parseOptions(fileOptions),
     };
     const showNotification: () => void = () => {
       if (!coreOptions.notification) {
         return;
       }
 
-      notifier.notify({
+      console.log({
         title: `spsave: ${spSaveOptions.files.length} file(s) uploaded`,
-        message: spSaveOptions.files.map((o) => { return o.fileName; }).join(', '),
-        icon: path.join(__dirname, '../../../assets/sp.png')
+        message: spSaveOptions.files.map((o) => {
+          return o.fileName;
+        }),
       });
     };
 
     if (spSaveOptions.files.length > 1) {
-      saveFileArray(spSaveOptions).then((data) => {
-        showNotification();
-        resolve(data);
+      saveFileArray(spSaveOptions)
+        .then((data) => {
+          showNotification();
+          resolve(data);
 
-        return null;
-      })
-        .catch(err => {
+          return null;
+        })
+        .catch((err) => {
           showError(err, coreOptions.notification);
           reject(err);
         });
     } else if (spSaveOptions.files.length === 1) {
-      saveSingleFile(spSaveOptions).then((data) => {
-        showNotification();
-        resolve(data);
+      saveSingleFile(spSaveOptions)
+        .then((data) => {
+          showNotification();
+          resolve(data);
 
-        return null;
-      })
-        .catch(err => {
+          return null;
+        })
+        .catch((err) => {
           showError(err, coreOptions.notification);
           reject(err);
         });
     } else {
       reject({
-        message: 'No files were uploaded. No files were found which match your criteria.'
+        message:
+          'No files were uploaded. No files were found which match your criteria.',
       });
     }
   });
 }
 
-function saveFileArray(opts: ISPSaveOptions, deferred?: IDeferred<any>): Promise<any> {
+function saveFileArray(
+  opts: ISPSaveOptions,
+  deferred?: IDeferred<any>
+): Promise<any> {
   if (!deferred) {
     deferred = defer<any>();
   }
@@ -78,7 +82,7 @@ function saveFileArray(opts: ISPSaveOptions, deferred?: IDeferred<any>): Promise
 
         return null;
       })
-      .catch(err => {
+      .catch((err) => {
         deferred.reject(err);
       });
   } else {
@@ -93,12 +97,10 @@ function saveSingleFile(opts: ISPSaveOptions): Promise<any> {
 }
 
 function showError(err: HTTPError, notify: boolean): void {
-
   if (notify) {
-    notifier.notify({
+    console.log({
       title: 'spsave: error occured',
       message: 'For details see console log',
-      icon: path.join(__dirname, '../../../assets/sp_error.png')
     });
   }
 
